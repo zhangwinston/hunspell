@@ -7,9 +7,7 @@ TEMPLATE = lib
 CONFIG += staticlib
 CONFIG += warn_off
 
-win32 {
-    DEFINES += BUILDING_LIBHUNSPELL
-}
+DEFINES += HUNSPELL_STATIC
 
 INCLUDEPATH *= $$PWD/src/hunspell
 INCLUDEPATH *= $$PWD/src/parsers

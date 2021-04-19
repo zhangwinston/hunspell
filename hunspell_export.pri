@@ -16,3 +16,5 @@ win32:CONFIG(release, debug|release) {
     LIBS += $$OUT_FOLDER/libHunspell.a
     PRE_TARGETDEPS += $$OUT_FOLDER/libHunspell.a
 }
+
+DEFINES += HUNSPELL_STATIC
