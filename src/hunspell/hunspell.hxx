@@ -131,7 +131,7 @@ class LIBHUNSPELL_DLL_EXPORTED Hunspell {
    *   root: root (stem), when input is a word with affix(es)
    */
   bool spell(const std::string& word, int* info = NULL, std::string* root = NULL);
-  H_DEPRECATED int spell(const char* word, int* info = NULL, char** root = NULL);
+  H_DEPRECATED size_t spell(const char* word, int* info = NULL, char** root = NULL);
 
   /* suggest(suggestions, word) - search suggestions
    * input: pointer to an array of strings pointer and the (bad) word
@@ -141,7 +141,7 @@ class LIBHUNSPELL_DLL_EXPORTED Hunspell {
    *   of suggestion equals 0.)
    */
   std::vector<std::string> suggest(const std::string& word);
-  H_DEPRECATED int suggest(char*** slst, const char* word);
+  H_DEPRECATED size_t suggest(char*** slst, const char* word);
 
   /* Suggest words from suffix rules
    * suffix_suggest(suggestions, root_word)
@@ -152,7 +152,7 @@ class LIBHUNSPELL_DLL_EXPORTED Hunspell {
    *   of suggestion equals 0.)
    */
   std::vector<std::string> suffix_suggest(const std::string& root_word);
-  H_DEPRECATED int suffix_suggest(char*** slst, const char* root_word);
+  H_DEPRECATED size_t suffix_suggest(char*** slst, const char* root_word);
 
   /* deallocate suggestion lists */
   H_DEPRECATED void free_list(char*** slst, int n);
@@ -164,11 +164,11 @@ class LIBHUNSPELL_DLL_EXPORTED Hunspell {
 
   /* analyze(result, word) - morphological analysis of the word */
   std::vector<std::string> analyze(const std::string& word);
-  H_DEPRECATED int analyze(char*** slst, const char* word);
+  H_DEPRECATED size_t analyze(char*** slst, const char* word);
 
   /* stem(word) - stemmer function */
   std::vector<std::string> stem(const std::string& word);
-  H_DEPRECATED int stem(char*** slst, const char* word);
+  H_DEPRECATED size_t stem(char*** slst, const char* word);
 
   /* stem(analysis, n) - get stems from a morph. analysis
    * example:
@@ -177,11 +177,11 @@ class LIBHUNSPELL_DLL_EXPORTED Hunspell {
    * int n2 = stem(&result2, result, n1);
    */
   std::vector<std::string> stem(const std::vector<std::string>& morph);
-  H_DEPRECATED int stem(char*** slst, char** morph, int n);
+  H_DEPRECATED size_t stem(char*** slst, char** morph, int n);
 
   /* generate(result, word, word2) - morphological generation by example(s) */
   std::vector<std::string> generate(const std::string& word, const std::string& word2);
-  H_DEPRECATED int generate(char*** slst, const char* word, const char* word2);
+  H_DEPRECATED size_t generate(char*** slst, const char* word, const char* word2);
 
   /* generate(result, word, desc, n) - generation by morph. description(s)
    * example:
@@ -191,7 +191,7 @@ class LIBHUNSPELL_DLL_EXPORTED Hunspell {
    * for (int i = 0; i < n; i++) printf("%s\n", result[i]);
    */
   std::vector<std::string> generate(const std::string& word, const std::vector<std::string>& pl);
-  H_DEPRECATED int generate(char*** slst, const char* word, char** desc, int n);
+  H_DEPRECATED size_t generate(char*** slst, const char* word, char** desc, int n);
 
   /* functions for run-time modification of the dictionary */
 

@@ -169,7 +169,7 @@ std::string& u16_u8(std::string& dest, const std::vector<w_char>& src) {
   return dest;
 }
 
-int u8_u16(std::vector<w_char>& dest, const std::string& src) {
+size_t u8_u16(std::vector<w_char>& dest, const std::string& src) {
   dest.clear();
   std::string::const_iterator u8 = src.begin();
   std::string::const_iterator u8_max = src.end();

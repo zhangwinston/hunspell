@@ -77,7 +77,7 @@ LIBHUNSPELL_DLL_EXPORTED char* Hunspell_get_dic_encoding(Hunhandle* pHunspell);
  *   a newly allocated array of strings (*slts will be NULL when number
  *   of suggestion equals 0.)
  */
-LIBHUNSPELL_DLL_EXPORTED int Hunspell_suggest(Hunhandle* pHunspell,
+LIBHUNSPELL_DLL_EXPORTED size_t Hunspell_suggest(Hunhandle* pHunspell,
                                               char*** slst,
                                               const char* word);
 
@@ -85,13 +85,13 @@ LIBHUNSPELL_DLL_EXPORTED int Hunspell_suggest(Hunhandle* pHunspell,
 
 /* analyze(result, word) - morphological analysis of the word */
 
-LIBHUNSPELL_DLL_EXPORTED int Hunspell_analyze(Hunhandle* pHunspell,
+LIBHUNSPELL_DLL_EXPORTED size_t Hunspell_analyze(Hunhandle* pHunspell,
                                               char*** slst,
                                               const char* word);
 
 /* stem(result, word) - stemmer function */
 
-LIBHUNSPELL_DLL_EXPORTED int Hunspell_stem(Hunhandle* pHunspell,
+LIBHUNSPELL_DLL_EXPORTED size_t Hunspell_stem(Hunhandle* pHunspell,
                                            char*** slst,
                                            const char* word);
 
@@ -102,14 +102,14 @@ LIBHUNSPELL_DLL_EXPORTED int Hunspell_stem(Hunhandle* pHunspell,
  * int n2 = Hunspell_stem2(result2, result, n1);
  */
 
-LIBHUNSPELL_DLL_EXPORTED int Hunspell_stem2(Hunhandle* pHunspell,
+LIBHUNSPELL_DLL_EXPORTED size_t Hunspell_stem2(Hunhandle* pHunspell,
                                             char*** slst,
                                             char** desc,
                                             int n);
 
 /* generate(result, word, word2) - morphological generation by example(s) */
 
-LIBHUNSPELL_DLL_EXPORTED int Hunspell_generate(Hunhandle* pHunspell,
+LIBHUNSPELL_DLL_EXPORTED size_t Hunspell_generate(Hunhandle* pHunspell,
                                                char*** slst,
                                                const char* word,
                                                const char* word2);
@@ -122,7 +122,7 @@ LIBHUNSPELL_DLL_EXPORTED int Hunspell_generate(Hunhandle* pHunspell,
  * for (int i = 0; i < n; i++) printf("%s\n", result[i]);
  */
 
-LIBHUNSPELL_DLL_EXPORTED int Hunspell_generate2(Hunhandle* pHunspell,
+LIBHUNSPELL_DLL_EXPORTED size_t Hunspell_generate2(Hunhandle* pHunspell,
                                                 char*** slst,
                                                 const char* word,
                                                 char** desc,

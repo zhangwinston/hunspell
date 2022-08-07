@@ -121,7 +121,7 @@ class HashMgr {
   int add(const std::string& word);
   int add_with_affix(const std::string& word, const std::string& pattern);
   int remove(const std::string& word);
-  int decode_flags(unsigned short** result, const std::string& flags, FileMgr* af) const;
+  size_t decode_flags(unsigned short** result, const std::string& flags, FileMgr* af) const;
   bool decode_flags(std::vector<unsigned short>& result, const std::string& flags, FileMgr* af) const;
   unsigned short decode_flag(const char* flag) const;
   char* encode_flag(unsigned short flag) const;
@@ -132,22 +132,22 @@ class HashMgr {
   const std::vector<replentry>& get_reptable() const;
 
  private:
-  int get_clen_and_captype(const std::string& word, int* captype);
-  int get_clen_and_captype(const std::string& word, int* captype, std::vector<w_char> &workbuf);
+  size_t get_clen_and_captype(const std::string& word, int* captype);
+  size_t get_clen_and_captype(const std::string& word, int* captype, std::vector<w_char> &workbuf);
   int load_tables(const char* tpath, const char* key);
   int add_word(const std::string& word,
-               int wcl,
+               size_t wcl,
                unsigned short* ap,
-               int al,
+               size_t al,
                const std::string* desc,
                bool onlyupcase,
                int captype);
   int load_config(const char* affpath, const char* key);
   bool parse_aliasf(const std::string& line, FileMgr* af);
   int add_hidden_capitalized_word(const std::string& word,
-                                  int wcl,
+                                  size_t wcl,
                                   unsigned short* flags,
-                                  int al,
+                                  size_t al,
                                   const std::string* dp,
                                   int captype);
   bool parse_aliasm(const std::string& line, FileMgr* af);

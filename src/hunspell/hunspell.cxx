@@ -110,15 +110,15 @@ public:
   struct cs_info* get_csconv();
 
   int spell(const char* word, int* info = NULL, char** root = NULL);
-  int suggest(char*** slst, const char* word);
-  int suffix_suggest(char*** slst, const char* root_word);
+  size_t suggest(char*** slst, const char* word);
+  size_t suffix_suggest(char*** slst, const char* root_word);
   void free_list(char*** slst, int n);
   char* get_dic_encoding();
-  int analyze(char*** slst, const char* word);
-  int stem(char*** slst, const char* word);
-  int stem(char*** slst, char** morph, int n);
-  int generate(char*** slst, const char* word, const char* word2);
-  int generate(char*** slst, const char* word, char** desc, int n);
+  size_t analyze(char*** slst, const char* word);
+  size_t stem(char*** slst, const char* word);
+  size_t stem(char*** slst, char** morph, int n);
+  size_t generate(char*** slst, const char* word, const char* word2);
+  size_t generate(char*** slst, const char* word, char** desc, int n);
   const char* get_wordchars() const;
   const char* get_version() const;
   int input_conv(const char* word, char* dest, size_t destsize);
@@ -148,10 +148,10 @@ private:
                     size_t* pabbrev);
   void clean_ignore(std::string& dest, const std::string& src);
   void mkinitcap(std::string& u8);
-  int mkinitcap2(std::string& u8, std::vector<w_char>& u16);
-  int mkinitsmall2(std::string& u8, std::vector<w_char>& u16);
+  size_t mkinitcap2(std::string& u8, std::vector<w_char>& u16);
+  size_t mkinitsmall2(std::string& u8, std::vector<w_char>& u16);
   void mkallcap(std::string& u8);
-  int mkallsmall2(std::string& u8, std::vector<w_char>& u16);
+  size_t mkallsmall2(std::string& u8, std::vector<w_char>& u16);
   struct hentry* checkword(const std::string& source, int* info, std::string* root);
   std::string sharps_u8_l1(const std::string& source);
   hentry*
@@ -270,7 +270,7 @@ size_t HunspellImpl::cleanword2(std::string& dest,
 
   // now strip off any trailing periods (recording their presence)
   *pabbrev = 0;
-  int nl = strlen(q);
+  size_t nl = strlen(q);
   while ((nl > 0) && (*(q + nl - 1) == '.')) {
     nl--;
     (*pabbrev)++;
@@ -307,7 +307,7 @@ void HunspellImpl::cleanword(std::string& dest,
 
   // now strip off any trailing periods (recording their presence)
   *pabbrev = 0;
-  int nl = strlen((const char*)q);
+  size_t nl = strlen((const char*)q);
   while ((nl > 0) && (*(q + nl - 1) == '.')) {
     nl--;
     (*pabbrev)++;
@@ -379,7 +379,7 @@ void HunspellImpl::mkallcap(std::string& u8) {
   }
 }
 
-int HunspellImpl::mkallsmall2(std::string& u8, std::vector<w_char>& u16) {
+size_t HunspellImpl::mkallsmall2(std::string& u8, std::vector<w_char>& u16) {
   if (utf8) {
     ::mkallsmall_utf(u16, langnum);
     u16_u8(u8, u16);
@@ -772,7 +772,7 @@ bool HunspellImpl::spell_internal(const std::string& word, int* info, std::strin
 struct hentry* HunspellImpl::checkword(const std::string& w, int* info, std::string* root) {
   std::string w2;
   const char* word;
-  int len;
+  size_t len;
 
   // remove IGNORE characters from the string
   clean_ignore(w2, w);
@@ -1370,7 +1370,7 @@ void HunspellImpl::mkinitcap(std::string& u8) {
   }
 }
 
-int HunspellImpl::mkinitcap2(std::string& u8, std::vector<w_char>& u16) {
+size_t HunspellImpl::mkinitcap2(std::string& u8, std::vector<w_char>& u16) {
   if (utf8) {
     ::mkinitcap_utf(u16, langnum);
     u16_u8(u8, u16);
@@ -1380,7 +1380,7 @@ int HunspellImpl::mkinitcap2(std::string& u8, std::vector<w_char>& u16) {
   return u8.size();
 }
 
-int HunspellImpl::mkinitsmall2(std::string& u8, std::vector<w_char>& u16) {
+size_t HunspellImpl::mkinitsmall2(std::string& u8, std::vector<w_char>& u16) {
   if (utf8) {
     ::mkinitsmall_utf(u16, langnum);
     u16_u8(u8, u16);
@@ -1879,7 +1879,7 @@ std::vector<std::string> HunspellImpl::spellml(const std::string& in_word) {
 std::vector<std::string> HunspellImpl::suffix_suggest(const std::string& root_word) {
   std::vector<std::string> slst;
   struct hentry* he = NULL;
-  int len;
+  size_t len;
   std::string w2;
   const char* word;
   const char* ignoredchars = pAMgr->get_ignore();
@@ -1911,7 +1911,7 @@ std::vector<std::string> HunspellImpl::suffix_suggest(const std::string& root_wo
 }
 
 namespace {
-  int munge_vector(char*** slst, const std::vector<std::string>& items) {
+  size_t munge_vector(char*** slst, const std::vector<std::string>& items) {
     if (items.empty()) {
       *slst = NULL;
       return 0;
@@ -1939,12 +1939,12 @@ int HunspellImpl::spell(const char* word, int* info, char** root) {
   return ret;
 }
 
-int HunspellImpl::suggest(char*** slst, const char* word) {
+size_t HunspellImpl::suggest(char*** slst, const char* word) {
   std::vector<std::string> suggests = suggest(word);
   return munge_vector(slst, suggests);
 }
 
-int HunspellImpl::suffix_suggest(char*** slst, const char* root_word) {
+size_t HunspellImpl::suffix_suggest(char*** slst, const char* root_word) {
   std::vector<std::string> stems = suffix_suggest(root_word);
   return munge_vector(slst, stems);
 }
@@ -1962,17 +1962,17 @@ char* HunspellImpl::get_dic_encoding() {
   return &encoding[0];
 }
 
-int HunspellImpl::analyze(char*** slst, const char* word) {
+size_t HunspellImpl::analyze(char*** slst, const char* word) {
   std::vector<std::string> stems = analyze(word);
   return munge_vector(slst, stems);
 }
 
-int HunspellImpl::stem(char*** slst, const char* word) {
+size_t HunspellImpl::stem(char*** slst, const char* word) {
   std::vector<std::string> stems = stem(word);
   return munge_vector(slst, stems);
 }
 
-int HunspellImpl::stem(char*** slst, char** desc, int n) {
+size_t HunspellImpl::stem(char*** slst, char** desc, int n) {
   std::vector<std::string> morph;
   morph.reserve(n);
   for (int i = 0; i < n; ++i)
@@ -1982,12 +1982,12 @@ int HunspellImpl::stem(char*** slst, char** desc, int n) {
   return munge_vector(slst, stems);
 }
 
-int HunspellImpl::generate(char*** slst, const char* word, const char* pattern) {
+size_t HunspellImpl::generate(char*** slst, const char* word, const char* pattern) {
   std::vector<std::string> stems = generate(word, pattern);
   return munge_vector(slst, stems);
 }
 
-int HunspellImpl::generate(char*** slst, const char* word, char** pl, int pln) {
+size_t HunspellImpl::generate(char*** slst, const char* word, char** pl, int pln) {
   std::vector<std::string> morph;
   morph.reserve(pln);
   for (int i = 0; i < pln; ++i)
@@ -2100,15 +2100,15 @@ bool Hunspell::input_conv(const std::string& word, std::string& dest) {
   return m_Impl->input_conv(word, dest);
 }
 
-int Hunspell::spell(const char* word, int* info, char** root) {
+size_t Hunspell::spell(const char* word, int* info, char** root) {
   return m_Impl->spell(word, info, root);
 }
 
-int Hunspell::suggest(char*** slst, const char* word) {
+size_t Hunspell::suggest(char*** slst, const char* word) {
   return m_Impl->suggest(slst, word);
 }
 
-int Hunspell::suffix_suggest(char*** slst, const char* root_word) {
+size_t Hunspell::suffix_suggest(char*** slst, const char* root_word) {
   return m_Impl->suffix_suggest(slst, root_word);
 }
 
@@ -2120,23 +2120,23 @@ char* Hunspell::get_dic_encoding() {
   return m_Impl->get_dic_encoding();
 }
 
-int Hunspell::analyze(char*** slst, const char* word) {
+size_t Hunspell::analyze(char*** slst, const char* word) {
   return m_Impl->analyze(slst, word);
 }
 
-int Hunspell::stem(char*** slst, const char* word) {
+size_t Hunspell::stem(char*** slst, const char* word) {
   return m_Impl->stem(slst, word);
 }
 
-int Hunspell::stem(char*** slst, char** desc, int n) {
+size_t Hunspell::stem(char*** slst, char** desc, int n) {
   return m_Impl->stem(slst, desc, n);
 }
 
-int Hunspell::generate(char*** slst, const char* word, const char* pattern) {
+size_t Hunspell::generate(char*** slst, const char* word, const char* pattern) {
   return m_Impl->generate(slst, word, pattern);
 }
 
-int Hunspell::generate(char*** slst, const char* word, char** pl, int pln) {
+size_t Hunspell::generate(char*** slst, const char* word, char** pl, int pln) {
   return m_Impl->generate(slst, word, pl, pln);
 }
 
@@ -2178,23 +2178,23 @@ char* Hunspell_get_dic_encoding(Hunhandle* pHunspell) {
   return reinterpret_cast<HunspellImpl*>(pHunspell)->get_dic_encoding();
 }
 
-int Hunspell_suggest(Hunhandle* pHunspell, char*** slst, const char* word) {
+size_t Hunspell_suggest(Hunhandle* pHunspell, char*** slst, const char* word) {
   return reinterpret_cast<HunspellImpl*>(pHunspell)->suggest(slst, word);
 }
 
-int Hunspell_analyze(Hunhandle* pHunspell, char*** slst, const char* word) {
+size_t Hunspell_analyze(Hunhandle* pHunspell, char*** slst, const char* word) {
   return reinterpret_cast<HunspellImpl*>(pHunspell)->analyze(slst, word);
 }
 
-int Hunspell_stem(Hunhandle* pHunspell, char*** slst, const char* word) {
+size_t Hunspell_stem(Hunhandle* pHunspell, char*** slst, const char* word) {
   return reinterpret_cast<HunspellImpl*>(pHunspell)->stem(slst, word);
 }
 
-int Hunspell_stem2(Hunhandle* pHunspell, char*** slst, char** desc, int n) {
+size_t Hunspell_stem2(Hunhandle* pHunspell, char*** slst, char** desc, int n) {
   return reinterpret_cast<HunspellImpl*>(pHunspell)->stem(slst, desc, n);
 }
 
-int Hunspell_generate(Hunhandle* pHunspell,
+size_t Hunspell_generate(Hunhandle* pHunspell,
                       char*** slst,
                       const char* word,
                       const char* pattern)
@@ -2202,7 +2202,7 @@ int Hunspell_generate(Hunhandle* pHunspell,
   return reinterpret_cast<HunspellImpl*>(pHunspell)->generate(slst, word, pattern);
 }
 
-int Hunspell_generate2(Hunhandle* pHunspell,
+size_t Hunspell_generate2(Hunhandle* pHunspell,
                        char*** slst,
                        const char* word,
                        char** desc,

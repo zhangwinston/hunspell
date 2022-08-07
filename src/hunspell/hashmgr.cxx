@@ -179,9 +179,9 @@ struct hentry* HashMgr::lookup(const char* word) const {
 
 // add a word to the hash table (private)
 int HashMgr::add_word(const std::string& in_word,
-                      int wcl,
+                      size_t wcl,
                       unsigned short* aff,
-                      int al,
+                      size_t al,
                       const std::string* in_desc,
                       bool onlyupcase,
                       int captype) {
@@ -224,7 +224,7 @@ int HashMgr::add_word(const std::string& in_word,
   }
 
   bool upcasehomonym = false;
-  int descl = desc ? (aliasm ? sizeof(char*) : desc->size() + 1) : 0;
+  size_t descl = desc ? (aliasm ? sizeof(char*) : desc->size() + 1) : 0;
   // variable-length hash record with word and optional fields
   struct hentry* hp =
       (struct hentry*)malloc(sizeof(struct hentry) + word->size() + descl);
@@ -420,9 +420,9 @@ int HashMgr::add_word(const std::string& in_word,
 }
 
 int HashMgr::add_hidden_capitalized_word(const std::string& word,
-                                         int wcl,
+                                         size_t wcl,
                                          unsigned short* flags,
-                                         int flagslen,
+                                         size_t flagslen,
                                          const std::string* dp,
                                          int captype) {
   if (flags == NULL)
@@ -461,8 +461,8 @@ int HashMgr::add_hidden_capitalized_word(const std::string& word,
 }
 
 // detect captype and modify word length for UTF-8 encoding
-int HashMgr::get_clen_and_captype(const std::string& word, int* captype, std::vector<w_char> &workbuf) {
-  int len;
+size_t HashMgr::get_clen_and_captype(const std::string& word, int* captype, std::vector<w_char> &workbuf) {
+  size_t len;
   if (utf8) {
     len = u8_u16(workbuf, word);
     *captype = get_captype_utf8(workbuf, langnum);
@@ -473,7 +473,7 @@ int HashMgr::get_clen_and_captype(const std::string& word, int* captype, std::ve
   return len;
 }
 
-int HashMgr::get_clen_and_captype(const std::string& word, int* captype) {
+size_t HashMgr::get_clen_and_captype(const std::string& word, int* captype) {
   std::vector<w_char> workbuf;
   return get_clen_and_captype(word, captype, workbuf);
 }
@@ -519,7 +519,7 @@ int HashMgr::add(const std::string& word) {
     int captype;
     int al = 0;
     unsigned short* flags = NULL;
-    int wcl = get_clen_and_captype(word, &captype);
+    size_t wcl = get_clen_and_captype(word, &captype);
     add_word(word, wcl, flags, al, NULL, false, captype);
     return add_hidden_capitalized_word(word, wcl, flags, al, NULL,
                                        captype);
@@ -533,7 +533,7 @@ int HashMgr::add_with_affix(const std::string& word, const std::string& example)
   remove_forbidden_flag(word);
   if (dp && dp->astr) {
     int captype;
-    int wcl = get_clen_and_captype(word, &captype);
+    size_t wcl = get_clen_and_captype(word, &captype);
     if (aliasf) {
       add_word(word, wcl, dp->astr, dp->alen, NULL, false, captype);
     } else {
@@ -661,7 +661,7 @@ int HashMgr::load_tables(const char* tpath, const char* key) {
     }
 
     unsigned short* flags;
-    int al;
+    size_t al;
     if (ap_pos != std::string::npos && ap_pos != ts.size()) {
       std::string ap(ts.substr(ap_pos + 1));
       ts.resize(ap_pos);
@@ -687,7 +687,7 @@ int HashMgr::load_tables(const char* tpath, const char* key) {
     }
 
     int captype;
-    int wcl = get_clen_and_captype(ts, &captype, workbuf);
+    size_t wcl = get_clen_and_captype(ts, &captype, workbuf);
     const std::string *dp_str = dp.empty() ? NULL : &dp;
     // add the word and its index plus its capitalized form optionally
     if (add_word(ts, wcl, flags, al, dp_str, false, captype) ||
@@ -714,8 +714,8 @@ int HashMgr::hash(const char* word) const {
   return (unsigned long)hv % tablesize;
 }
 
-int HashMgr::decode_flags(unsigned short** result, const std::string& flags, FileMgr* af) const {
-  int len;
+size_t HashMgr::decode_flags(unsigned short** result, const std::string& flags, FileMgr* af) const {
+  size_t len;
   if (flags.empty()) {
     *result = NULL;
     return 0;
